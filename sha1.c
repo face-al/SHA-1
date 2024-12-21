@@ -1,4 +1,4 @@
-#include "sha-1.h"
+#include "sha1.h"
 
 void sha1_pad(SHA1_CTX *msg){
     size_t curr_pos = msg->data_in_buffer; //this is the current position
