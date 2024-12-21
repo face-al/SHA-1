@@ -1,36 +1,23 @@
 #include "sha1.h"
 
-void sha1_pad(SHA1_CTX *msg){
-    size_t curr_pos = msg->data_in_buffer; //this is the current position
-    uint64_t msg_length = msg->total_length; // message length initialy
+void sha1_pad(SHA1_CTX *msg) {
+    size_t curr_pos = msg->data_in_buffer; // Current position in the buffer
+    uint64_t msg_length = msg->total_length; // Original message length in bits
 
-    // Part 1 
-    // Just add a one 1 and followed by 7 0's
-    msg->buffer[curr_pos++] = 0x80; // Append
-    msg->data_in_buffer++;
+    // Part 1: Append 0x80
+    msg->buffer[curr_pos++] = 0x80;
 
-    // Part 2
-    // We need to loop and add 0's until we reach 448 bits or 56 bytes
-    while(curr_pos < 56){
+    // Part 2: Pad with 0x00 until buffer length is 56 bytes
+    while (curr_pos < 56) {
         msg->buffer[curr_pos++] = 0x00;
-        msg-> data_in_buffer++;
     }
 
-
-    // Part 3
-    // if original msg_length < 32 bits -> add 0 and then msg_length
-    if(msg_length < 32){
-        msg->buffer[curr_pos++] = 0x00;
-        msg-> data_in_buffer++;
-        msg->buffer[curr_pos++] = msg_length;
-        msg-> data_in_buffer++;
-
-    } else if(msg_length < 64){
-        msg->buffer[curr_pos++] = msg_length;
-        msg-> data_in_buffer++;
+    // Part 3: Append original message length as a 64-bit big-endian integer
+    for (int i = 7; i >= 0; i--) {
+        msg->buffer[curr_pos++] = (msg_length >> (i * 8)) & 0xFF;
     }
-
 }
+
 
 int main() {
     // Dynamically allocate memory for the SHA-1 context
