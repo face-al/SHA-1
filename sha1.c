@@ -31,14 +31,22 @@ int main() {
     memset(test, 0, sizeof(SHA1_CTX));
 
     // Copy the message "abc" into the buffer
-    memcpy(test->buffer, "abc", 3); // "abc" is 3 bytes
-    test->data_in_buffer = 3;            // Set the buffer length
-    test->total_length = 3 * 8;      // Total length in bits
+    memcpy(test->buffer, "abcabcababcabcababcabcababcabcababcabcababcabcababcabcababcabcab987", 67); // "abc" is 3 bytes
+    test->data_in_buffer = 67;            // Set the buffer length
+    test->total_length = 67 * 8;      // Total length in bits
 
     // Call the padding function
     sha1_pad(test);
 
-    // Free the allocated memory
+   
+     // Print the padded buffer
+    printf("Padded buffer:\n");
+    for (size_t i = 0; i < 67; i++) {
+        printf("%02x ", test->buffer[i]);
+        if ((i + 1) % 16 == 0) printf("\n"); // Print 16 bytes per line
+    }
+
+     // Free the allocated memory
     free(test);
 
     return 0;
