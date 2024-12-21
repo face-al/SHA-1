@@ -2,11 +2,33 @@
 
 void sha1_pad(SHA1_CTX *msg){
     size_t curr_pos = msg->data_in_buffer; //this is the current position
-    printf("Before: curr_pos = %zu, data_in_buffer = %zu\n", curr_pos, msg->data_in_buffer);
+    uint64_t msg_length = msg->total_length; // message length initialy
+
+    // Part 1 
+    // Just add a one 1 and followed by 7 0's
     msg->buffer[curr_pos++] = 0x80; // Append
     msg->data_in_buffer++;
-    printf("After: curr_pos = %zu, data_in_buffer = %zu\n", curr_pos, msg->data_in_buffer);
 
+    // Part 2
+    // We need to loop and add 0's until we reach 448 bits or 56 bytes
+    while(curr_pos < 56){
+        msg->buffer[curr_pos++] = 0x00;
+        msg-> data_in_buffer++;
+    }
+
+
+    // Part 3
+    // if original msg_length < 32 bits -> add 0 and then msg_length
+    if(msg_length < 32){
+        msg->buffer[curr_pos++] = 0x00;
+        msg-> data_in_buffer++;
+        msg->buffer[curr_pos++] = msg_length;
+        msg-> data_in_buffer++;
+
+    } else if(msg_length < 64){
+        msg->buffer[curr_pos++] = msg_length;
+        msg-> data_in_buffer++;
+    }
 
 }
 
@@ -22,7 +44,7 @@ int main() {
     memset(test, 0, sizeof(SHA1_CTX));
 
     // Copy the message "abc" into the buffer
-    memcpy(test->buffer, "abc", 3);
+    memcpy(test->buffer, "abc", 3); // "abc" is 3 bytes
     test->data_in_buffer = 3;            // Set the buffer length
     test->total_length = 3 * 8;      // Total length in bits
 
