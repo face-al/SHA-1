@@ -13,7 +13,7 @@
 // SHA-1 context structure
 typedef struct {
     uint8_t buffer[SHA1_BLOCK_SIZE];  // Current 512-bit block
-    size_t data_in_buffer;                // Length of data in the buffer
+    size_t data_in_buffer;                // Length of data in the buffer in bytes
     uint64_t total_length;            // Total message length in bits
     uint32_t h[5];                    // Intermediate hash state
 } SHA1_CTX;
