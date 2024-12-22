@@ -8,6 +8,15 @@ void sha1_pad(SHA1_CTX *msg) {
     msg->buffer[curr_pos++] = 0x80;
 
     // Part 2: Pad with 0x00 until buffer length is 56 bytes
+
+    while(curr_pos > 56){
+        if(curr_pos < 64){
+            msg->buffer[curr_pos++] = 0x00;
+        }
+        curr_pos = 0;
+    }
+
+
     while (curr_pos < 56) {
         msg->buffer[curr_pos++] = 0x00;
     }

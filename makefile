@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -g
 
 # Executable and source files
 TARGET = sha1
-SRCS = sha1.c
+SRCS = src/sha1.c
 
 # Default target
 all: $(TARGET)
