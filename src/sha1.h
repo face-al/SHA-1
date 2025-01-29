@@ -19,6 +19,6 @@ typedef struct {
 } SHA1_CTX;
 
 // Function prototypes
-void sha1_pad(SHA1_CTX *msg);
+uint8_t *sha1_pad(SHA1_CTX *msg);
 
 #endif // SHA1_H
